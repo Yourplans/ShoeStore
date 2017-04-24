@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.Login"
+    android:orientation="vertical"
+    android:background="@drawable/fonodo">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:layout_marginBottom="30dp"
+        >
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.shoestore.login.LoginPlus"
+            tools:layout="@layout/fragment_plus"
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragmentPlus"></fragment>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.shoestore.login.LoginFacebook"
+            tools:layout="@layout/fragment_facebook"
+            android:id="@+id/fragmentFacebok"></fragment>
+
+    </LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

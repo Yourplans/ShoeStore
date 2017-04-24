@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.ActivityProductos">
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_setting"
+        app:showAsAction="never" />
+    <item android:id="@+id/car"
+        android:title="@string/Carrito"
+        android:icon="@drawable/car"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item android:id="@+id/chat"
+        android:title="@string/mensajes"
+        android:icon="@drawable/send"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+</menu>

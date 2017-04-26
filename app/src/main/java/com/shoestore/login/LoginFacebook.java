@@ -36,6 +36,7 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 import com.shoestore.activities.MainActivity;
+import com.shoestore.chat.UserDetails;
 import com.shoestore.objects.FirebaseReference;
 import com.shoestore.objects.UsuariosVo;
 
@@ -46,7 +47,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Andres Rangel on 03/02/2016.
  */
 public class LoginFacebook extends Fragment {
-
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
@@ -101,8 +101,8 @@ public class LoginFacebook extends Fragment {
                     String id=user.getUid();
                     String name=user.getDisplayName();
                     String email=user.getEmail();
-                    String photo= String.valueOf( user.getPhotoUrl() );
-                    String token="";
+                    String photo= String.valueOf( user.getPhotoUrl());
+                    String token= UserDetails.token;
 
                     UsuariosVo usuariosVo=new UsuariosVo(id,name,email,photo,token);
                     //si se logra obtener los datos del usuario se hace la insercion en base de datos

@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shoestore.R;
 import com.shoestore.adapter.ViewPagerAdapter;
+import com.shoestore.chat.ChatMain;
 import com.shoestore.fragments.FragmentCategorias;
 import com.shoestore.fragments.FragmentFavoritos;
 import com.shoestore.fragments.FragmentHome;
@@ -254,6 +255,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             };timer.schedule(timerTask,2000);
 
             return true;
+        }
+        //Action Chat
+        if (id == R.id.chat){
+
+            Intent mIntent =  new Intent(getApplicationContext(),ChatMain.class);
+
+
         }
 
         return super.onOptionsItemSelected(item);

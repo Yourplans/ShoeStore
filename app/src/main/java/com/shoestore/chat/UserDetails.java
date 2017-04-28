@@ -6,5 +6,11 @@ package com.shoestore.chat;
 
 public class UserDetails {
 
-    public static   String token ="";
+    public static String user = "Daniel";
+    public static String pass= "";
+    public static String userChat = "";
+    public static String tokenUser="";
+    public static String tokenUserChat ="";
+    public static String imageUserChat="";
+    public static int index=55555555;
 }

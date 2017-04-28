@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shoestore.R;
 import com.shoestore.adapter.ViewPagerAdapter;
 import com.shoestore.chat.ChatMain;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     FragmentFavoritos fragmentFavoritos;
     FragmentPerfil fragmentPerfil;
     MenuItem prevMenuItem;
+    private boolean isInitialized =  false;// validador para persistencia
 
 
     @Override
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Shoe Store");
         setSupportActionBar(toolbar);
+
+        persistence();
 
         //Initializing viewPager
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -260,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (id == R.id.chat){
 
             Intent mIntent =  new Intent(getApplicationContext(),ChatMain.class);
+            startActivity(mIntent);
 
 
         }
@@ -278,6 +283,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             e.printStackTrace();
         }
         Log.d("###", FirebaseReference.CODIGO_USUARIO_REFERENCE.toString());
+    }
+
+    /**
+     * Valida y activa la persistencia de Firebase
+     */
+    private void persistence() {
+        try{
+            if(!isInitialized){
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                isInitialized = true;
+            }else {
+                Log.d("this Main","Already Initialized");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

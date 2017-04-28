@@ -12,7 +12,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="143dp">
+        android:layout_height="85dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,10 +55,6 @@
             android:layout_gravity="center|top"
             android:elevation="@dimen/elevation_circleimageprofile"
             app:layout_behavior="com.zoonref.SimpleViewBehavior"
-            app:dependsOn="@+id/appBarProfile"
-            app:dependType="y"
-            app:dependTargetY="@dimen/limitY_circleimage"
-            app:targetX="16dp"
             android:id="@+id/imageContact"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"

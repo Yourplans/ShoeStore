@@ -22,7 +22,7 @@ public class TokenService  extends FirebaseInstanceIdService {
 
     private void registrationToken(String token) {
 
-        UserDetails.token=token;
+        UserDetails.tokenUser=token;
 
     }
 }

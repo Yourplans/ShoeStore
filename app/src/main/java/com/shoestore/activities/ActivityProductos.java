@@ -1,5 +1,6 @@
 package com.shoestore.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.shoestore.R;
 import com.shoestore.adapter.AdapterCategorias;
 import com.shoestore.adapter.CustomPagerAdapter;
+import com.shoestore.chat.ChatMain;
 
 public class ActivityProductos extends AppCompatActivity {
 
@@ -66,6 +68,11 @@ public class ActivityProductos extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id==R.id.chat){
+
+            Intent mIntent =  new Intent(getApplicationContext(),ChatMain.class);
+            startActivity(mIntent);
         }
 
         return super.onOptionsItemSelected(item);

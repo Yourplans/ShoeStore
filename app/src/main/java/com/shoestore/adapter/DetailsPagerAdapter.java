@@ -49,7 +49,7 @@ public class DetailsPagerAdapter extends PagerAdapter {
         layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view=(LayoutInflater.from(context)).inflate(R.layout.details_imagen,container,false);
         ImageView imageView= (ImageView) view.findViewById(R.id.imageInformacion);
-        Glide.with(context).load(arrayList.get(position).getImage()).crossFade()
+        Glide.with(context).load(arrayList.get(position).getImage()).crossFade().override(800,400).fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.cargando)
                 .into(imageView);
         final ImagesDetails imagesDetails=arrayList.get(position);

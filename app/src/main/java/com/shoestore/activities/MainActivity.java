@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,7 +24,10 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shoestore.R;
 import com.shoestore.adapter.ViewPagerAdapter;
 import com.shoestore.chat.ChatMain;
@@ -33,6 +37,7 @@ import com.shoestore.fragments.FragmentHome;
 import com.shoestore.fragments.FragmentPerfil;
 import com.shoestore.login.Login;
 import com.shoestore.objects.FirebaseReference;
+import com.shoestore.objects.UsuariosVo;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     FragmentPerfil fragmentPerfil;
     MenuItem prevMenuItem;
     private boolean isInitialized =  false;// validador para persistencia
+    public static String imgUsuario,nameUsuario,id_user;
 
 
     @Override
@@ -272,17 +278,45 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        consultarCodigoUsuario();
+    }
+
     private void consultarCodigoUsuario(){
 
         try {
             BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(openFileInput("codigo.txt")));
             FirebaseReference.CODIGO_USUARIO_REFERENCE="users/"+bufferedReader.readLine();
+            consultarDatosUsuario();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         Log.d("###", FirebaseReference.CODIGO_USUARIO_REFERENCE.toString());
+    }
+
+    private void consultarDatosUsuario() {
+        FirebaseDatabase database=FirebaseDatabase.getInstance();
+        database.getReference(FirebaseReference.CODIGO_USUARIO_REFERENCE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                UsuariosVo usuariosVo=dataSnapshot.getValue(UsuariosVo.class);
+                imgUsuario=usuariosVo.getPhoto();
+                id_user=usuariosVo.getId_user();
+                nameUsuario=usuariosVo.getName();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        } );
+
     }
 
     /**

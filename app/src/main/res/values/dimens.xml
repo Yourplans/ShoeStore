@@ -8,4 +8,6 @@
     <dimen name="elevation_circleimageprofile">10dp</dimen>
     <dimen name="limitY_circleimage">-206dp</dimen>
     <dimen name="fab_margin_c">12dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

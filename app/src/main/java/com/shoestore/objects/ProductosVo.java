@@ -5,14 +5,31 @@ package com.shoestore.objects;
  */
 
 public class ProductosVo {
-
+    private String key;
     private String image;
     private String name;
+    private String desc;
     private int price;
     private int promotion;
     private float rating;
 
     public ProductosVo() {
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getImage() {

@@ -55,7 +55,7 @@ public class FragmenProductos extends Fragment {
         recyclerView= (RecyclerView) view.findViewById(R.id.reciclerProductos);
         arrayList=new ArrayList<>();
         layoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-        adapter=new AdapterProductos(arrayList,getActivity());
+        adapter=new AdapterProductos(arrayList,getActivity(),categoria);
         recyclerView.setLayoutManager(layoutManager);
         FirebaseDatabase database=FirebaseDatabase.getInstance();
         database.getReference(categoria).addValueEventListener( new ValueEventListener() {
@@ -66,6 +66,7 @@ public class FragmenProductos extends Fragment {
                         dataSnapshot.getChildren()) {
 
                     ProductosVo productosVo=snapshot.getValue(ProductosVo.class);
+                    productosVo.setKey(snapshot.getKey());
                     arrayList.add(productosVo);
                     recyclerView.setAdapter( adapter );
                     progressDialog.cancel();

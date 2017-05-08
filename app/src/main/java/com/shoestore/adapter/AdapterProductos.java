@@ -1,9 +1,12 @@
 package com.shoestore.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.shoestore.R;
+import com.shoestore.activities.InfoProductos;
 import com.shoestore.objects.ProductosVo;
 
 import java.util.ArrayList;
@@ -25,12 +29,13 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.Adap
 
     ArrayList<ProductosVo> items;
     Context context;
-    public static String categoria;
+    String categoria;
 
 
-    public AdapterProductos(ArrayList<ProductosVo> items, Context context) {
+    public AdapterProductos(ArrayList<ProductosVo> items, Context context, String categoria) {
         this.items = items;
         this.context = context;
+        this.categoria=categoria;
     }
 
     /**
@@ -59,7 +64,10 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.Adap
         holder.precioPromocion.setText("$"+items.get(position).getPromotion());
         if (items.get(position).getPromotion()!=0){
             holder.precio.setPaintFlags(holder.precio.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.precio.setTextColor(Color.parseColor("#FFA9A9A9"));
+            holder.precioPromocion.setTextColor(Color.parseColor("#FFFF0000"));
         }else {
+            holder.precio.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
            holder.precioPromocion.setText("");
         }
         holder.ratingBar.setRating(items.get(position).getRating());
@@ -106,7 +114,19 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.Adap
         @Override
         public void onClick(View view) {
             ProductosVo productosVo=items.get(getAdapterPosition());
-            Toast.makeText(context,""+productosVo.getName(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,productosVo.getKey()+"\n"+productosVo.getName(),Toast.LENGTH_SHORT).show();
+
+            Intent intent=new Intent(view.getContext(),InfoProductos.class);
+            intent.putExtra("referencia",categoria+productosVo.getKey());
+            intent.putExtra("key_product",productosVo.getKey());
+            intent.putExtra("image",productosVo.getImage());
+            intent.putExtra("name",productosVo.getName());
+            intent.putExtra("desc",productosVo.getDesc());
+            intent.putExtra("price",productosVo.getPrice());
+            intent.putExtra("promotion",productosVo.getPromotion());
+            intent.putExtra("rating",productosVo.getRating());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            view.getContext().startActivity(intent);
 
 
         }

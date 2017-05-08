@@ -18,5 +18,6 @@ public class FirebaseReference {
     final public static String DAMAS_FORMAL_REFERENCE="category/damas/formal/";
     final public static String DAMAS_SANDALIAS_REFERENCE="category/damas/sandalias/";
     public static String CODIGO_USUARIO_REFERENCE="";
+    public static String REVIEWS_REFERENCE="reviews";
 
 }

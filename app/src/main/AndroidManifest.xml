@@ -46,6 +46,7 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".activities.MainActivity" />
 
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
@@ -61,19 +62,26 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        
         <service android:name=".chat.Notifications.MessageService">
-
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
         </service>
 
-        <activity android:name=".chat.ChatMain"
+        <activity
+            android:name=".chat.ChatMain"
             android:label="Chat Ayuda"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".chat.ChatActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".chat.ChatActivity" />
+        <activity
+            android:name=".activities.InfoProductos"
+            android:label="@string/title_activity_info_productos"
+            android:parentActivityName=".activities.ActivityProductos"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".dialogs.DialogDetailsImages"
+            android:label="Details Image"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

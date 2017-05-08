@@ -78,10 +78,7 @@
             android:label="@string/title_activity_info_productos"
             android:parentActivityName=".activities.ActivityProductos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".dialogs.DialogDetailsImages"
-            android:label="Details Image"
-            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

@@ -1,12 +1,15 @@
 package com.shoestore.chat;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +37,7 @@ import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
 
+
     //Se instancia la base de datos y se obtiene la referencia
     FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference mDatabaseReference = mFirebaseDatabase.getReference();
@@ -49,10 +53,13 @@ public class ChatActivity extends AppCompatActivity {
     private static final String TAG = ChatActivity.class.getSimpleName();
     private BroadcastReceiver mReceiver;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
         broadCast();
 
 
@@ -71,9 +78,101 @@ public class ChatActivity extends AppCompatActivity {
         setTitle(UserDetails.userChat);
 
         messageEvents();
+    }
+
+    private void broadCast() {
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(Config.PUSH_NOTIFICATION)){
+
+                }
+            }
+        };
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
+        NotificationUtils.clearNotifications(getApplicationContext());
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+    }
+
+    //Action of buttons
+    private void onClick() {
+
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String message = mEditText.getText().toString();
+                mEditText.setText("");
+
+                if (!message.isEmpty() && !message.equals("")) {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("message", message);
+                    map.put("user", UserDetails.user);
+                    map.put("visible","false");
+                    mDatabaseReference.child("messages").child(UserDetails.userChat + "_" + UserDetails.user).push().setValue(map);
+                    mDatabaseReference.child("messages").child(UserDetails.user + "_" + UserDetails.userChat).push().setValue(map);
+
+                }
+
+                sendNotification(UserDetails.user,message);
+            }
+        });
+
+    }
+
+    /*
+    Send Message Notification
+     */
+    private void sendNotification(final String user, final String message) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, ResourceApp.UrlNotifications, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> parameters = new HashMap<String, String>();
+                parameters.put("title", user);
+                parameters.put("msg",message);
+                parameters.put("img",UserDetails.imageUserChat);
+                parameters.put("id",UserDetails.tokenUserChat);
+                return parameters;
+            }
+
+        };
+
+        RequestQueue mRequestQueue = Volley.newRequestQueue(ChatActivity.this);
+        mRequestQueue.add(request);
+
+    }
+
+
+
+    /**
+     * Messages Events
+     */
     private void messageEvents() {
 
         mDatabaseReference.child("messages").child(UserDetails.user+"_"+UserDetails.userChat).addChildEventListener(new ChildEventListener() {
@@ -126,6 +225,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    //Add message to chat windows
     private void addMessage(String message, boolean type) {
 
         ChatMessages mChatMessages = new ChatMessages();
@@ -135,56 +235,4 @@ public class ChatActivity extends AppCompatActivity {
         mListView.setAdapter(mCustomChatAdapter);
         mCustomChatAdapter.notifyDataSetChanged();
     }
-
-    private void broadCast() {
-
-    }
-
-    private void onClick (){
-
-    }
-
-    /**
-     *Send Notification
-     */
-    private void sendNotification(final String user, final String message) {
-
-        StringRequest request = new StringRequest(Request.Method.POST, ResourceChat.UrlNotifications, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String,String> parameters = new HashMap<String, String>();
-                parameters.put("title", user);
-                parameters.put("msg",message);
-                parameters.put("img",UserDetails.imageUserChat);
-                parameters.put("token",UserDetails.tokenUserChat);
-                return parameters;
-            }
-
-        };
-
-        RequestQueue mRequestQueue = Volley.newRequestQueue(ChatActivity.this);
-        mRequestQueue.add(request);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Config.PUSH_NOTIFICATION));
-        NotificationUtils.clearNotifications(getApplicationContext());
-
-    }
-
 }

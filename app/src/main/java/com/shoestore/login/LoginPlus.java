@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.shoestore.R;
 
 import com.shoestore.activities.MainActivity;
+import com.shoestore.chat.UserDetails;
 import com.shoestore.objects.FirebaseReference;
 import com.shoestore.objects.UsuariosVo;
 
@@ -77,6 +78,7 @@ public class LoginPlus extends Fragment {
                     reference.child( user.getUid()).setValue(usuariosVo);
                     Toast.makeText( getContext(),"Bienvenido a ShoeStore "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                     guardarTextCodigo(id);
+                    UserDetails.user=id;
                    goMainActivity();
                 }
             }

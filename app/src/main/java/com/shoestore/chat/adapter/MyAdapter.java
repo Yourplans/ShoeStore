@@ -27,7 +27,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.AdapterViewHolder>{
 
 
-
     private ArrayList<ContactModel> contactos;
     private int resource;
     private Activity mActivity;
@@ -53,7 +52,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.AdapterViewHolder>
         final ContactModel contactosList = contactos.get(position);
         holder.nameText.setText(contactosList.getName());
         holder.state.setText(contactosList.getDesc());
-        Picasso.with(mActivity).load(contactosList.getImage()).resize(120,120).into(holder.imageContact);
+        Picasso.with(mActivity).load(contactosList.getImage()).resize(100,100).into(holder.imageContact);
         if (contactosList.isNew()==false){
             holder.imageView.setVisibility(View.VISIBLE);
         }else{
@@ -72,7 +71,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.AdapterViewHolder>
                 mActivity.startActivity(mIntent);
             }
         });
-
 
     }
 

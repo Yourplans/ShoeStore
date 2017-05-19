@@ -83,7 +83,6 @@ public class ChatMain extends AppCompatActivity {
                     contactModel.setId(postSnapshot.child("id").getValue().toString());
                     contactModel.setNew(true);
 
-
                     contactModels.add(contactModel);
                 }
 

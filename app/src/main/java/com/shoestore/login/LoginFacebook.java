@@ -103,6 +103,7 @@ public class LoginFacebook extends Fragment {
                     String email=user.getEmail();
                     String photo= String.valueOf( user.getPhotoUrl());
                     String token= UserDetails.tokenUser;
+                    UserDetails.user=id;
 
                     UsuariosVo usuariosVo=new UsuariosVo(id,name,email,photo,token);
                     //si se logra obtener los datos del usuario se hace la insercion en base de datos

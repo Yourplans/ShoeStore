@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.shoestore.R;
 import com.shoestore.adapter.ViewPagerAdapter;
 import com.shoestore.chat.ChatMain;
+import com.shoestore.chat.UserDetails;
 import com.shoestore.fragments.FragmentCategorias;
 import com.shoestore.fragments.FragmentFavoritos;
 import com.shoestore.fragments.FragmentHome;
@@ -308,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 imgUsuario=usuariosVo.getPhoto();
                 id_user=usuariosVo.getId_user();
                 nameUsuario=usuariosVo.getName();
+                UserDetails.user=id_user;
 
             }
 

@@ -44,7 +44,7 @@
                 android:layout_alignBottom="@+id/imageContact"
                 android:layout_alignLeft="@+id/textName"
                 android:layout_alignStart="@+id/textName"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:textStyle="italic" />
 
         </LinearLayout>

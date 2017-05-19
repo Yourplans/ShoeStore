@@ -6,7 +6,7 @@ package com.shoestore.chat;
 
 public class UserDetails {
 
-    public static String user = "Daniel";
+    public static String user = "";
     public static String pass= "";
     public static String userChat = "";
     public static String tokenUser="";

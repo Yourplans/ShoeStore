@@ -1,6 +1,5 @@
 package com.shoestore.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,10 +26,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shoestore.R;
-import com.shoestore.adapter.CustomPagerAdapter;
 import com.shoestore.adapter.DetailsPagerAdapter;
 import com.shoestore.adapter.DividerItemDecoration;
 import com.shoestore.adapter.OpinionesAdapterRecycler;
+import com.shoestore.dialogs.DialogCarrito;
 import com.shoestore.dialogs.DialogOpiniones;
 import com.shoestore.objects.FirebaseReference;
 import com.shoestore.objects.ImagesDetails;
@@ -56,15 +56,21 @@ public class InfoProductos extends AppCompatActivity {
     private int price;
     private int promotion;
     private float rating;
-    TextView txtName,txtDesc,txtPrice,txtPricePromotion,txtCalificanos,txtOpiniones;
+    private String colors,size;
+    TextView txtName,txtDesc,txtPrice,txtPricePromotion,txtCalificanos,txtOpiniones,txtColores,txtTallas;
+    TextView tituColores,tituTallas;
     Toolbar toolbar;
     public static RatingBar ratingBar;
     public static float ratinValue;
     public static String key_product;
     ArrayList<ReviewsVo> arrayListOpiniones;
     RecyclerView listaOpiniones;
+    CardView layout_variacion_talla;
+    CardView layout_variacion_colores;
     RecyclerView.Adapter adapterOpiniones;
     RecyclerView.LayoutManager layoutManagerOpiniones;
+    private Typeface typeface;
+    private ProductosVo productosVo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +81,15 @@ public class InfoProductos extends AppCompatActivity {
         toolbar.setTitle(name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        layout_variacion_talla = (CardView) findViewById(R.id.layou_variacion_talla);
+        layout_variacion_colores = (CardView) findViewById(R.id.layou_variacion_colores);
         txtName= (TextView) findViewById(R.id.txtName);
         txtDesc= (TextView) findViewById(R.id.txtDesc);
+        tituColores= (TextView) findViewById(R.id.tituColores);
+        tituTallas= (TextView) findViewById(R.id.tituTallas);
         txtPrice= (TextView) findViewById(R.id.txtPrice);
+        txtColores= (TextView) findViewById(R.id.txtColores);
+        txtTallas= (TextView) findViewById(R.id.txtTallas);
         txtCalificanos= (TextView) findViewById(R.id.textCalificanos);
         txtOpiniones= (TextView) findViewById(R.id.textOpiniones);
         txtPricePromotion= (TextView) findViewById(R.id.txtPricePromotion);
@@ -91,26 +103,8 @@ public class InfoProductos extends AppCompatActivity {
         listaOpiniones.addItemDecoration(new DividerItemDecoration(getApplicationContext(), R.drawable.divider));
         listaOpiniones.setAdapter(adapterOpiniones);
         consultaOpiniones();
-        Typeface typeface= Typeface.createFromAsset(getAssets(),"font/Roboto-Regular.ttf");
-        txtName.setText(name);
-        txtDesc.setText(desc);
-        txtPrice.setText("Precio: $"+price);
-        txtPricePromotion.setText("Ahora: $"+promotion);
-        if (promotion!=0){
-            txtPrice.setText("Antes: $"+price);
-            txtPrice.setPaintFlags(txtPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            txtPrice.setTextColor(Color.parseColor("#FFA9A9A9"));
-            txtPricePromotion.setTextColor(Color.parseColor("#FFFF0000"));
-        }else {
-            txtPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-            txtPricePromotion.setText("");
-        }
-        txtName.setTypeface(typeface);
-        txtDesc.setTypeface(typeface);
-        txtPrice.setTypeface(typeface);
-        txtCalificanos.setTypeface(typeface);
-        txtOpiniones.setTypeface(typeface);
-        txtPricePromotion.setTypeface(typeface);
+        typeface= Typeface.createFromAsset(getAssets(),"font/Roboto-Regular.ttf");
+
         ratingBar = (RatingBar) findViewById(R.id.ratingInfo);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -129,12 +123,14 @@ public class InfoProductos extends AppCompatActivity {
         arrayList=new ArrayList<>();
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         detailsPagerAdapter = new DetailsPagerAdapter(this,arrayList);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DialogCarrito dialogCarrito=new DialogCarrito(InfoProductos.this,productosVo);
+                dialogCarrito.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogCarrito.setCancelable(false);
+                dialogCarrito.show();
             }
         });
 
@@ -196,12 +192,74 @@ public class InfoProductos extends AppCompatActivity {
             referencia=(String)extras.get("referencia");
             key_product=(String)extras.get("key_product");
             image= (String) extras.get("image");
-            name= (String) extras.get("name");
+   /*         name= (String) extras.get("name");
             desc= (String) extras.get("desc");
             price= (int) extras.get("price");
             promotion= (int) extras.get("promotion");
-            rating= (float) extras.get("rating");
+            rating= (float) extras.get("rating");*/
         }
+        Log.i("Referencia**",referencia);
+        FirebaseDatabase database=FirebaseDatabase.getInstance();
+        database.getReference(referencia+"/").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    productosVo=dataSnapshot.getValue(ProductosVo.class);
+                    name=productosVo.getName();
+                    desc=productosVo.getDesc();
+                    price=productosVo.getPrice();
+                    promotion=productosVo.getPromotion();
+                    rating=productosVo.getRating();
+                    colors=productosVo.getColors();
+                    size=productosVo.getSize();
+                    progressDialog.cancel();
+                txtName.setText(name);
+                txtDesc.setText(desc);
+                txtTallas.setText(size);
+                txtColores.setText(colors);
+                txtPrice.setText("Precio: $"+price);
+                txtPricePromotion.setText("Ahora: $"+promotion);
+                tituTallas.setText("Tallas");
+                tituColores.setText("Colores");
+                if (promotion!=0){
+                    txtPrice.setText("Antes: $"+price);
+                    txtPrice.setPaintFlags(txtPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    txtPrice.setTextColor(Color.parseColor("#FFA9A9A9"));
+                    txtPricePromotion.setTextColor(Color.parseColor("#FFFF0000"));
+                    txtPricePromotion.setVisibility(View.VISIBLE);
+                    txtPrice.setPadding(0,0,0,0);
+                }else {
+                    txtPrice.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+                    txtPricePromotion.setText("");
+                    txtPrice.setPadding(0,10,0,20);
+                    txtPrice.setTextColor(Color.parseColor("#ff000000"));
+                    txtPricePromotion.setVisibility(View.GONE);
+                }
+                if (size==null || size.equals("")) {
+                    layout_variacion_talla.setVisibility(View.GONE);
+                }else {
+                    layout_variacion_talla.setVisibility(View.VISIBLE);
+                }
+                if (colors==null || colors.equals("")) {
+                    layout_variacion_colores.setVisibility(View.GONE);
+                }else {
+                    layout_variacion_colores.setVisibility(View.VISIBLE);
+                }
+
+                txtName.setTypeface(typeface);
+                tituColores.setTypeface(typeface);
+                tituTallas.setTypeface(typeface);
+                txtDesc.setTypeface(typeface);
+                txtPrice.setTypeface(typeface);
+                txtCalificanos.setTypeface(typeface);
+                txtOpiniones.setTypeface(typeface);
+                txtPricePromotion.setTypeface(typeface);
+                }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressDialog.cancel();
+            }
+        } );
     }
 
     private int getItem(int i) {

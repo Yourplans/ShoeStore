@@ -139,7 +139,7 @@ public class ChatActivity extends AppCompatActivity {
      */
     private void sendNotification(final String user, final String message) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, ResourceApp.UrlNotifications, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, ResourceChat.UrlNotifications, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();

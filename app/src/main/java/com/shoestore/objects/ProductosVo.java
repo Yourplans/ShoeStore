@@ -12,8 +12,26 @@ public class ProductosVo {
     private int price;
     private int promotion;
     private float rating;
+    private String colors;
+    private String size;
 
     public ProductosVo() {
+    }
+
+    public String getColors() {
+        return colors;
+    }
+
+    public void setColors(String colors) {
+        this.colors = colors;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public String getDesc() {

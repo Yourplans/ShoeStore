@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@mipmap/ic_send_m"
+        android:src="@android:drawable/ic_menu_send"
         android:background="@color/cardview_light_background"
         app:backgroundTint="?attr/colorBackgroundFloating"
         android:layout_alignParentBottom="true"
